@@ -1,16 +1,18 @@
 import keyboard
 import cv2
-from mss import mss
+import mss
+import mss.tools
 import numpy as np
 import os
 import sys
 
 
-def on_press(val, img)
+def on_press(val, img):
     global img_count
     with open('actions.txt', 'a') as f:
         f.write('{}\n'.format(val))
-    mss.tools.to_png(img.rgb, img.size, output=r'./images/{0}_{1}'.format(val, img_count))
+    mss.tools.to_png(img.rgb, img.size, output=r'./images/{0}_{1}.png'.format(val, img_count))
+    img_count += 1
 
 def main():
         """
@@ -20,31 +22,31 @@ def main():
         RIGHT: 3
         LEFT: 4
         """
-        # screengrab
-        img = sct.grab(mon)
-        cv2.imshow(np.array(img))
+        while True:
+            # screengrab
+            img = sct.grab(mon)
+            cv2.imshow('FRAME', np.array(img))
 
-        if cv2.waitKey(25) & 0xFF == ord('q'):
-        cv2.destroyAllWindows()
-        break
+            if cv2.waitKey(25) & 0xFF == ord('q'):
+                cv2.destroyAllWindows()
+                break
 
-        # keypress callbacks
-        keyboard.on_press_key('down', lambda _: on_press('1', img), suppress=True)
-        keyboard.on_press_key('up', lambda _: on_press('2', img), suppress=True)
-        keyboard.on_press_key('right', lambda _: on_press('3', img), suppress=True)
-        keyboard.on_press_key('left', lambda _: on_press('4', img), suppress=True)
+            # keypress callbacks
+            keyboard.on_press_key('down', lambda _: on_press('1', img), suppress=True)
+            keyboard.on_press_key('up', lambda _: on_press('2', img), suppress=True)
+            keyboard.on_press_key('right', lambda _: on_press('3', img), suppress=True)
+            keyboard.on_press_key('left', lambda _: on_press('4', img), suppress=True)
 
 
 if __name__ == '__main__':
     mon = {
-            'top': ,
-            'left': ,
-            'width': ,
-            'height': ,
+            'top': 0,
+            'left': 0,
+            'width': 0,
+            'height': 0
             }
     
-    sct = mss()
-    
+    sct = mss.mss()
     img_count = 0
 
     if os.path.exists(r'./images'):
