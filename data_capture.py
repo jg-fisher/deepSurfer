@@ -5,18 +5,20 @@ import mss.tools
 import numpy as np
 import os
 import sys
-
+from helpers import last_frame
 
 def _on_press(val, img):
     global img_count
     with open('actions.txt', 'a') as f:
         f.write('{}\n'.format(val))
     mss.tools.to_png(img.rgb, img.size, output=r'./images/frame-{0}_action-{1}.png'.format(img_count, val))
+    print('Action {}.'.format(val))
     img_count += 1
 
 def _main():
         """
         Writes integer for respective action to text file.
+        NOTHING: 0
         DOWN: 1
         UP: 2
         RIGHT: 3
@@ -40,32 +42,34 @@ def _main():
                 break
 
             # keypress callbacks
-            keyboard.on_press_key('down', lambda _: on_press('1', img), suppress=True)
-            keyboard.on_press_key('up', lambda _: on_press('2', img), suppress=True)
-            keyboard.on_press_key('right', lambda _: on_press('3', img), suppress=True)
-            keyboard.on_press_key('left', lambda _: on_press('4', img), suppress=True)
+            keyboard.on_press_key('down', lambda _: _on_press('1', img), suppress=True)
+            keyboard.on_press_key('up', lambda _: _on_press('2', img), suppress=True)
+            keyboard.on_press_key('right', lambda _: _on_press('3', img), suppress=True)
+            keyboard.on_press_key('left', lambda _: _on_press('4', img), suppress=True)
+            keyboard.on_press_key('t', lambda: _on_press('5', img), suppress=True)
 
 def _check_paths():
     """
     Checks for existence of data files. Option to overwrite.
     """
-    if os.path.exists(r'./images'):
-        overwrite = (input('Image folder exists. Do you want to overwrite? Y/N: ')).lower()
-        if overwrite == 'y':
-            pass
-        elif overwrite == 'n':
-            sys.exit()
-    else:
-        os.mkdir(r'./images')
+    #if os.path.exists(r'./images'):
+    #    overwrite = (input('Image folder exists. Do you want to overwrite? Y/N: ')).lower()
+    #    if overwrite == 'y':
+    #        pass
+    #    elif overwrite == 'n':
+    #        sys.exit()
+    #else:
+    #    os.mkdir(r'./images')
 
-    if os.path.exists(r'./actions.txt'):
-        overwrite = (input('Actions.txt already exists. Do you want to overwrite? Y/N: ')).lower()
-        if overwrite == 'y':
-            pass
-        elif overwrite == 'n':
-            sys.exit()
+    #if os.path.exists(r'./actions.txt'):
+    #    overwrite = (input('Actions.txt already exists. Do you want to overwrite? Y/N: ')).lower()
+    #    if overwrite == 'y':
+    #        pass
+    #    elif overwrite == 'n':
+    #        sys.exit()
 
 if __name__ == '__main__':
-    img_count = 0
+    img_count = last_frame()
+    print('Total frames: {}'.format(img_count))
     _check_paths()
     _main()
