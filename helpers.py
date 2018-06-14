@@ -1,25 +1,47 @@
 import os
 from collections import deque
 
-def last_frame():
-    """
-    Begins new frames at last frame
-    """
-    images = []
+class Helpers:
+    def __init__(self):
+        pass
+
+    def last_frame(self):
+        """
+        Begins new frames at last frame
+        """
+        images = []
+        
+        for img in os.listdir('images'):
+            if img.endswith('.png'):
+                num = img.split('-')[1]
+                num = num.split('_')
+                images.append(num[0])
+        
+        max = 0
+        for i in images:
+            if int(i) > int(max):
+                max = i
+        
+        return int(max) + 1
     
-    for img in os.listdir('images'):
-        if img.endswith('.png'):
-            num = img.split('-')[1]
-            num = num.split('_')
-            images.append(num[0])
+    def remove_mistakes(self):
     
-    max = 0
-    for i in images:
-        if int(i) > int(max):
-            max = i
+        last_frame = self.last_frame()
     
-    return int(max) + 1
+        mistakes = 3
+    
+        for img in os.listdir('images'):
+            for delete in range(mistakes):
+                if img.endswith('.png') and str(last_frame - delete) in img:
+                    os.remove(r'./images/{}'.format(img))
+    
+        last_frame = self.last_frame()
+    
+        return last_frame
 
 
 if __name__ == '__main__':
-    print('Total frames: {}'.format(last_frame()))
+    helper = Helpers()
+    print('Total frames: {}'.format(helper.last_frame()))
+    print('Total frames - mistakes: {}'.format(helper.remove_mistakes()))
+

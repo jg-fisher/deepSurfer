@@ -18,21 +18,20 @@ class BidirectionalLSTM(nn.Module):
         return output
 
 
-class RNN(nn.Module):
+class CRNN(nn.Module):
     def __init__(self, input_dim, hidden_dim, output_dim):
        d = 64 
     
        self.cnn = nn.Sequential(
            nn.Conv2d(d, d*2, 4, 1, 1),
            nn.BatchNorm(d*2),
-           nn.ReLU()
+           nn.ReLU(),
            nn.Conv2d(d*2, d*4, 4, 2, 1),
            nn.BatchNorm(d*4),
-           nn.ReLU()
+           nn.ReLU(),
            nn.Conv2d(d*4, d*8, 4, 2, 1),
            nn.BatchNorm(d*8),
-           nn.RjLU()
-           j
+           nn.ReLU())
 
        self.rnn = nn.Sequential(
                BidirectionalLSTM(512, hidden_dim, hidden_dim),
