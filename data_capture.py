@@ -9,9 +9,6 @@ from helpers import Helpers
 
 def _on_press(val, img):
     global img_count
-    # creating labels when loading images for model
-    #with open('actions.txt', 'a') as f:
-    #    f.write('{}\n'.format(val))
     mss.tools.to_png(img.rgb, img.size, output=r'./images/frame-{0}_action-{1}.png'.format(img_count, val))
     print('Action {}.'.format(val))
     img_count += 1
@@ -58,22 +55,16 @@ def _check_paths():
     else:
         os.mkdir(r'./images')
 
-    #if os.path.exists(r'./actions.txt'):
-    #    overwrite = (input('Actions.txt already exists. Do you want to overwrite? Y/N: ')).lower()
-    #    if overwrite == 'y':
-    #        pass
-    #    elif overwrite == 'n':
-    #        sys.exit()
 
 if __name__ == '__main__':
     helper = Helpers()
     _check_paths()
 
-    # erase last few mistake frames
+    # option to erase last few mistake frames
     if len(sys.argv) > 1 :
         if sys.argv[1] == '--delete':
             print('Total frames: {}'.format(helper.last_frame()))
-            print('Total frames - mistakes: {}'.format(helper.remove_mistakes()))
+            print('Total frames - mistakes: {}'.format(helper.remove_mistakes(sys.argv[0])))
             img_count = helper.last_frame()
             print('Starting frames at {}'.format(img_count))
     else:

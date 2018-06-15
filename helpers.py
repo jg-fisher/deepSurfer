@@ -24,11 +24,11 @@ class Helpers:
         
         return int(max) + 1
     
-    def remove_mistakes(self):
+    def remove_mistakes(self, num_frames):
     
         last_frame = self.last_frame()
     
-        mistakes = 3
+        mistakes = num_frames
     
         for img in os.listdir('images'):
             for delete in range(mistakes):
